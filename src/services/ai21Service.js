@@ -1,14 +1,14 @@
 const axios = require("axios");
 const config = require("../config");
 
-async function consultarAI21(userText) {
-    let IA_CONTEXT = "Es un asistente de moda. Debe recomendar como vestir adecuadamente"
+async function queryAI21(userText) {
+    let AI_CONTEXT = "Es un asistente de moda en español. Debe recomendar como vestir adecuadamente"
     const data = {
         model: "jamba-large-1.6",
         messages: [
             {
                 role: "system",
-                content: IA_CONTEXT
+                content: AI_CONTEXT
             },
             {
                 role: "user",
@@ -42,5 +42,5 @@ async function consultarAI21(userText) {
 }
 
 module.exports = {
-    consultarAI21
+    queryAI21
 };

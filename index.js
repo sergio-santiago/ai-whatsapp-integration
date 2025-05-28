@@ -4,13 +4,13 @@ const webhookRoutes = require("./src/routes/webhookRoutes");
 
 const app = express();
 
-// Configuración de middleware
+// Middleware configuration
 app.use(express.json());
 
-// Rutas
+// Routes
 app.use(webhookRoutes);
 
-// Iniciar servidor
+// Start server
 app.listen(config.PORT, () => {
-    console.log(`Servidor escuchando en puerto ${config.PORT}`);
+    console.log(`Server listening on port ${config.PORT}`);
 });
