@@ -1,24 +1,24 @@
 const express = require("express");
 const router = express.Router();
 const config = require("../config");
-const { consultarAI21 } = require("../services/ai21Service");
-const { enviarMensajeWhatsApp } = require("../services/whatsappService");
+const { queryAI21 } = require("../services/ai21Service");
+const { sendWhatsAppMessage } = require("../services/whatsappService");
 
-// Endpoint para que Facebook verifique tu webhook
+// Endpoint for Facebook to verify your webhook
 router.get("/webhook", (req, res) => {
     const mode = req.query["hub.mode"];
     const token = req.query["hub.verify_token"];
     const challenge = req.query["hub.challenge"];
 
     if (mode && token === config.VERIFY_TOKEN) {
-        console.log("✅ Webhook verificado correctamente");
+        console.log("✅ Webhook verified successfully");
         res.status(200).send(challenge);
     } else {
         res.sendStatus(403);
     }
 });
 
-// Endpoint que recibe los mensajes WhatsApp (POST)
+// Endpoint that receives WhatsApp messages (POST)
 router.post("/webhook", async (req, res) => {
     try {
         const message = req.body.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
@@ -27,16 +27,16 @@ router.post("/webhook", async (req, res) => {
         const text = message.text?.body || "";
         const from = message.from;
 
-        console.log("💬 Mensaje recibido:", text);
+        console.log("💬 Message received:", text);
 
-        const respuestaIA = await consultarAI21(text);
-        const respuesta = respuestaIA || "Lo siento, no puedo responder ahora mismo.";
+        const aiResponse = await queryAI21(text);
+        const response = aiResponse || "Sorry, I can't answer right now..";
 
-        await enviarMensajeWhatsApp(from, respuesta);
+        await sendWhatsAppMessage(from, response);
 
         res.sendStatus(200);
     } catch (error) {
-        console.error("Error en webhook:", error.message);
+        console.error("Webhook error:", error.message);
         res.sendStatus(500);
     }
 });
