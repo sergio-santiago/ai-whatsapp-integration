@@ -18,8 +18,50 @@ A Node.js application that integrates AI21 Studio with WhatsApp Business API to 
    ```
    cp .env.example .env
    ```
-3. Edit the `.env` file with your actual credentials
-4. Get your ngrok authentication token from [ngrok dashboard](https://dashboard.ngrok.com) and add it to your `.env` file
+3. Edit the `.env` file with your credentials
+
+## Environment Variables Setup
+
+### AI21 Studio API Key (`AI21_API_KEY`)
+1. Create an account at [AI21 Studio](https://studio.ai21.com/)
+2. Go to your [Account Settings](https://studio.ai21.com/account)
+3. Copy your API key from the "API Key" section
+
+### WhatsApp Business API Configuration
+To get the `PHONE_NUMBER_ID` and `WHATSAPP_TOKEN`:
+
+1. Go to [Meta for Developers](https://developers.facebook.com/)
+2. Create or select your app (Choose "Business" type)
+3. Add WhatsApp product to your app
+4. Go to WhatsApp > Getting Started
+5. Set up your WhatsApp business account if you haven't already
+6. Find your `PHONE_NUMBER_ID` in the "From" field
+7. Generate and copy your `WHATSAPP_TOKEN` from the "Temporary access token" section
+8. Configure your webhook URL using the ngrok URL (see "Using ngrok for Webhooks" section below)
+
+### Verification Token (`VERIFY_TOKEN`)
+This is a custom string that you create yourself. It should be:
+- Random and unique
+- At least 32 characters long
+- Kept secret and secure
+
+Example of generating a secure token:
+```bash
+# Using OpenSSL (recommended)
+openssl rand -hex 32
+
+# Or using Node.js
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
+When configuring your webhook in the Meta for Developers dashboard, you'll need to provide this same `VERIFY_TOKEN` value.
+
+### Ngrok Authentication Token (`NGROK_AUTHTOKEN`)
+
+1. Sign up or log in to your [ngrok dashboard](https://dashboard.ngrok.com)
+2. Navigate to the "Your Authtoken" section
+3. Copy your authentication token
+4. Add it to your `.env` file as `NGROK_AUTHTOKEN`
 
 ## Running with Docker
 
