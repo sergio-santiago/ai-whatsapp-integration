@@ -35,8 +35,8 @@ To get the `PHONE_NUMBER_ID` and `WHATSAPP_TOKEN`:
 3. Add WhatsApp product to your app
 4. Go to WhatsApp > Getting Started
 5. Set up your WhatsApp business account if you haven't already
-6. Find your `PHONE_NUMBER_ID` in the "From" field (Number ID, not the number itself)
-7. Generate and copy your `WHATSAPP_TOKEN` from the "Temporary access token" section
+6. Generate and copy your `WHATSAPP_TOKEN` from the "Temporary access token" section
+7. Find your `PHONE_NUMBER_ID` in the "From" field (Number ID, not the number itself)
 8. Configure your webhook URL using the ngrok URL (see "Using ngrok for Webhooks" section below)
 
 ### Verification Token (`VERIFY_TOKEN`)
