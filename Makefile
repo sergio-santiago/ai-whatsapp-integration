@@ -1,6 +1,6 @@
 # Makefile for AI WhatsApp Integration project
 
-.PHONY: build run stop restart logs clean dev test
+.PHONY: build run stop restart logs clean dev test ngrok-logs ngrok-url
 
 # Build the Docker image
 build:
@@ -19,7 +19,15 @@ restart: stop run
 
 # View application logs
 logs:
-	docker-compose logs -f
+	docker-compose logs -f app
+
+# View ngrok logs
+ngrok-logs:
+	docker-compose logs -f ngrok
+
+# Get ngrok public URL
+ngrok-url:
+	@curl -s http://localhost:4040/api/tunnels | grep -o 'https://[^"]*'
 
 # Remove containers, volumes, and images
 clean:
@@ -35,6 +43,7 @@ test:
 
 # Initialize the project for first time setup
 init: build run
+	@echo "\nTo view ngrok public URL, run: make ngrok-url"
 
 # Show help
 help:
@@ -44,6 +53,8 @@ help:
 	@echo "  make stop      - Stop running container"
 	@echo "  make restart   - Restart the container"
 	@echo "  make logs      - View application logs"
+	@echo "  make ngrok-logs - View ngrok logs"
+	@echo "  make ngrok-url - Get the public ngrok URL"
 	@echo "  make clean     - Remove containers, volumes, and images"
 	@echo "  make dev       - Run in development mode with live updates"
 	@echo "  make test      - Run tests"

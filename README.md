@@ -3,6 +3,8 @@
 
 A Node.js application that integrates AI21 Studio with WhatsApp Business API to provide AI-powered responses to WhatsApp messages.
 
+> 🔗 **Includes ngrok integration** for exposing your local webhook to the internet.
+
 ## Requirements
 
 - Docker & Docker Compose
@@ -18,6 +20,7 @@ A Node.js application that integrates AI21 Studio with WhatsApp Business API to 
    cp .env.example .env
    ```
 3. Edit the `.env` file with your actual credentials
+4. Get your ngrok authentication token from [ngrok dashboard](https://dashboard.ngrok.com) and add it to your `.env` file
 
 ## Running with Docker
 
@@ -70,6 +73,32 @@ npm run dev
 node index.js
 ```
 
+## Using ngrok for Webhooks
+
+The project includes ngrok as a Docker service to expose your local webhook to the internet.
+
+1. Make sure you have added your ngrok authentication token to the `.env` file:
+   ```
+   NGROK_AUTHTOKEN=your_ngrok_auth_token
+   ```
+
+2. Start the application with ngrok:
+   ```bash
+   make init
+   ```
+
+3. Get your public webhook URL:
+   ```bash
+   make ngrok-url
+   ```
+
+4. Use the URL displayed (ending with `/webhook`) to configure your WhatsApp Business API webhook.
+
+5. View ngrok logs to debug connections:
+   ```bash
+   make ngrok-logs
+   ```
+
 ## Project Structure
 
 ```
@@ -80,7 +109,7 @@ node index.js
 ├── .env                 # Environment variables (create from .env.example)
 ├── .env.example        # Example environment file
 ├── Dockerfile          # Docker configuration
-├── docker-compose.yml  # Docker Compose configuration
+├── docker-compose.yml  # Docker Compose configuration (with ngrok service)
 ├── Makefile            # Make commands
 └── index.js            # Application entry point
 ```
