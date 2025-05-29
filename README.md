@@ -1,5 +1,4 @@
-# Chatbot WhatsApp con AI21
-# AI WhatsApp Integration
+# AI21 WhatsApp Chatbot Integration
 
 A Node.js application that integrates AI21 Studio with WhatsApp Business API to provide AI-powered responses to WhatsApp messages.
 

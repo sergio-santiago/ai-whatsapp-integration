@@ -1,14 +1,14 @@
 #!/bin/bash
 
-# Script para configurar ngrok en caso de que desees usarlo localmente sin Docker
+# Script to configure ngrok in case you want to use it locally without Docker
 
-echo "Configurando ngrok para la integración con WhatsApp..."
+echo "Configuring ngrok for WhatsApp integration..."
 
-# Verificar si ngrok ya está instalado
+# Check if ngrok is already installed
 if command -v ngrok &> /dev/null; then
-    echo "✅ ngrok ya está instalado"
+    echo "✅ ngrok is already installed"
 else
-    echo "🔄 Instalando ngrok..."
+    echo "🔄 Installing ngrok..."
     # Para Mac (usando Homebrew)
     if command -v brew &> /dev/null; then
         brew install ngrok
@@ -16,28 +16,28 @@ else
     elif command -v npm &> /dev/null; then
         npm install -g ngrok
     else
-        echo "❌ No se pudo instalar ngrok automáticamente. Instálalo manualmente desde https://ngrok.com/download"
+        echo "❌ Could not install ngrok automatically. Install it manually from https://ngrok.com/download"
         exit 1
     fi
 fi
 
-# Verificar si se proporcionó un token de autenticación
+# Check if an authentication token was provided
 if [ -z "$1" ]; then
-    echo "⚠️ No se proporcionó un token de autenticación."
-    echo "Obten tu token en https://dashboard.ngrok.com/get-started/your-authtoken"
-    read -p "Ingresa tu token de autenticación de ngrok: " NGROK_TOKEN
+    echo "⚠️ No authentication token provided."
+    echo "Get your token at https://dashboard.ngrok.com/get-started/your-authtoken"
+    read -p "Enter your ngrok authentication token: " NGROK_TOKEN
 else
     NGROK_TOKEN=$1
 fi
 
-# Configurar el token de autenticación
+# Configure the authentication token
 ngrok config add-authtoken $NGROK_TOKEN
 
-echo "✅ ngrok configurado correctamente"
-echo "Para iniciar ngrok y exponer tu aplicación local, ejecuta:"
+echo "✅ ngrok configured successfully"
+echo "To start ngrok and expose your local application, run:"
 echo "ngrok http 3000"
 
-# Agregar el token al archivo .env si existe
+# Add the token to the .env file if it exists
 if [ -f .env ]; then
     if grep -q "NGROK_AUTHTOKEN" .env; then
         sed -i.bak "s/NGROK_AUTHTOKEN=.*/NGROK_AUTHTOKEN=$NGROK_TOKEN/g" .env
@@ -45,5 +45,5 @@ if [ -f .env ]; then
     else
         echo "\nNGROK_AUTHTOKEN=$NGROK_TOKEN" >> .env
     fi
-    echo "✅ Token agregado al archivo .env"
+    echo "✅ Token added to .env file"
 fi
