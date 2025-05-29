@@ -6,6 +6,8 @@ const { sendWhatsAppMessage } = require("../services/whatsappService");
 
 // Endpoint for Facebook to verify your webhook
 router.get("/webhook", (req, res) => {
+    console.log("🔑 Verifying webhook");
+
     const mode = req.query["hub.mode"];
     const token = req.query["hub.verify_token"];
     const challenge = req.query["hub.challenge"];
