@@ -14,17 +14,17 @@ A Node.js application that integrates AI21 Studio with WhatsApp Business API to 
 ## Setup
 
 1. Clone this repository
-2. Copy the `.env.example` file to `.env` and fill in your API keys and configuration:
+2. Copy the `.env.example` file to `.env`:
    ```
    cp .env.example .env
    ```
-3. Edit the `.env` file with your credentials
+3. Edit the `.env` file with your credentials provided in the next step
 
 ## Environment Variables Setup
 
 ### AI21 Studio API Key (`AI21_API_KEY`)
 1. Create an account at [AI21 Studio](https://studio.ai21.com/)
-2. Go to your [Account Settings](https://studio.ai21.com/account)
+2. Go to your Workspace API keys
 3. Copy your API key from the "API Key" section
 
 ### WhatsApp Business API Configuration
@@ -35,7 +35,7 @@ To get the `PHONE_NUMBER_ID` and `WHATSAPP_TOKEN`:
 3. Add WhatsApp product to your app
 4. Go to WhatsApp > Getting Started
 5. Set up your WhatsApp business account if you haven't already
-6. Find your `PHONE_NUMBER_ID` in the "From" field
+6. Find your `PHONE_NUMBER_ID` in the "From" field (Number ID, not the number itself)
 7. Generate and copy your `WHATSAPP_TOKEN` from the "Temporary access token" section
 8. Configure your webhook URL using the ngrok URL (see "Using ngrok for Webhooks" section below)
 
