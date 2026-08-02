@@ -8,10 +8,19 @@
     "ngrok": "ngrok http 3000",
     "setup-ngrok": "bash scripts/setup-ngrok.sh"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "keywords": [
+    "whatsapp",
+    "whatsapp-business-api",
+    "chatbot",
+    "ai21",
+    "nodejs",
+    "express",
+    "webhooks",
+    "docker"
+  ],
+  "author": "Sergio Santiago Henares <sersanhen@gmail.com> (https://github.com/sergio-santiago)",
+  "license": "MIT",
+  "description": "AI-powered WhatsApp chatbot bridging WhatsApp Business API and AI21 Studio (Node.js, Express and Docker)",
   "dependencies": {
     "axios": "^1.9.0",
     "body-parser": "^2.2.0",
@@ -20,5 +29,9 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sergio-santiago/whatsapp-ai-chatbot"
   }
 }
