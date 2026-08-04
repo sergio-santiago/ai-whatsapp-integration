@@ -1,9 +1,32 @@
-node_modules
-npm-debug.log
-.git
-.env
+# Anything not needed to run the service. The build only copies package
+# metadata and src/, but a tight ignore keeps the build context small and makes
+# an accidental COPY . . harmless.
+
+node_modules/
+npm-debug.log*
+
+.git/
+.github/
 .gitignore
+.gitattributes
+.editorconfig
+
+# Every env file, not just `.env`. The previous version ignored that one name
+# and would happily have baked a `.env.production` into the image.
+.env
+.env.*
+!.env.example
+
+tests/
+docs/
+*.md
+LICENSE
+
 Dockerfile
 .dockerignore
+compose*.yaml
 Makefile
-README.md
+
+.idea/
+.vscode/
+.DS_Store

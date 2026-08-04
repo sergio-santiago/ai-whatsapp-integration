@@ -39,12 +39,23 @@ export function createApp(options: CreateAppOptions): Express {
   const app = express()
   app.disable('x-powered-by')
 
-  app.get('/healthz', (_request: Request, response: Response) => {
+  // Two probes because there are two questions, and answering both from one
+  // route is a trap: a liveness probe that sees the draining 503 concludes the
+  // process is broken and kills it, which is precisely when it was finishing
+  // the work it had already accepted.
+
+  /** Liveness. Answers while the process can serve at all. */
+  app.get('/health', (_request: Request, response: Response) => {
+    response.status(200).json({ status: 'ok' })
+  })
+
+  /** Readiness. Stops answering as soon as shutdown begins. */
+  app.get('/ready', (_request: Request, response: Response) => {
     if (!isReady()) {
-      response.status(503).json({ status: 'shutting_down' })
+      response.status(503).json({ status: 'draining' })
       return
     }
-    response.status(200).json({ status: 'ok' })
+    response.status(200).json({ status: 'ready' })
   })
 
   for (const channel of channels) {

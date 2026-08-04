@@ -1,0 +1,17 @@
+name: messaging-llm-bridge
+
+services:
+  app:
+    build:
+      context: .
+    image: messaging-llm-bridge:local
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3000}:3000"
+    env_file:
+      - .env
+    # tini as PID 1, so orphaned children are reaped rather than accumulating.
+    init: true
+    # Docker sends SIGKILL 10 seconds after SIGTERM by default, which is less
+    # than SHUTDOWN_GRACE_MS plus SHUTDOWN_DRAIN_MS can legitimately take.
+    stop_grace_period: 30s

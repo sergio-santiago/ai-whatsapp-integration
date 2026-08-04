@@ -96,24 +96,46 @@ after(async () => {
   await Promise.all(harnesses.map((instance) => instance.close()))
 })
 
-describe('health endpoint', () => {
+describe('liveness probe', () => {
   it('answers 200 while the process is serving', async () => {
     const app = await harness()
 
-    const response = await fetch(`${app.url}/healthz`)
+    const response = await fetch(`${app.url}/health`)
 
     assert.equal(response.status, 200)
     assert.deepEqual(await response.json(), { status: 'ok' })
+  })
+
+  it('keeps answering 200 during shutdown, so nothing kills a draining process', async () => {
+    // The whole reason liveness and readiness are separate routes. A single
+    // endpoint returning 503 here would get the container restarted mid-drain.
+    const app = await harness()
+    app.setReady(false)
+
+    const response = await fetch(`${app.url}/health`)
+
+    assert.equal(response.status, 200)
+  })
+})
+
+describe('readiness probe', () => {
+  it('answers 200 while the process accepts traffic', async () => {
+    const app = await harness()
+
+    const response = await fetch(`${app.url}/ready`)
+
+    assert.equal(response.status, 200)
+    assert.deepEqual(await response.json(), { status: 'ready' })
   })
 
   it('answers 503 once shutdown has begun', async () => {
     const app = await harness()
     app.setReady(false)
 
-    const response = await fetch(`${app.url}/healthz`)
+    const response = await fetch(`${app.url}/ready`)
 
     assert.equal(response.status, 503)
-    assert.deepEqual(await response.json(), { status: 'shutting_down' })
+    assert.deepEqual(await response.json(), { status: 'draining' })
   })
 })
 

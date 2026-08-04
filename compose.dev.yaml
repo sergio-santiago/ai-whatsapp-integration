@@ -1,0 +1,17 @@
+# Development overlay. Applied explicitly, never by default:
+#
+#   docker compose -f compose.yaml -f compose.dev.yaml up
+#
+# Docker Compose picks up `compose.override.yaml` on its own, which is how a
+# bind mount over the application code ends up running in production without
+# anyone deciding it should. This file has to be asked for by name.
+services:
+  app:
+    # Mounts the working tree over the image, so edits apply without a rebuild.
+    volumes:
+      - ./src:/app/src:ro
+      - ./tests:/app/tests:ro
+    environment:
+      LOG_LEVEL: debug
+    command: ["node", "--watch", "src/main.ts"]
+    restart: "no"
