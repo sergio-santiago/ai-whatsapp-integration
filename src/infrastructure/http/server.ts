@@ -1,4 +1,4 @@
-import express, { type Express, type Request, type Response } from 'express'
+import express, { type Express, type NextFunction, type Request, type Response } from 'express'
 import type { Channel } from '../../domain/ports.ts'
 import type { IncomingMessage } from '../../domain/types.ts'
 import { type Logger, redact } from '../logger.ts'
@@ -130,6 +130,33 @@ export function createApp(options: CreateAppOptions): Express {
       },
     )
   }
+
+  // Without this, Express falls back to its own handler, which writes a raw
+  // stack trace to stderr. That breaks one-JSON-object-per-line for whatever
+  // is collecting the logs, and a body-parser error would carry a fragment of
+  // the request with it. An oversized body is a client problem, not an
+  // incident, so it is recorded as one line and answered with a status.
+  app.use((error: unknown, _request: Request, response: Response, next: NextFunction) => {
+    if (response.headersSent) {
+      next(error)
+      return
+    }
+
+    const status =
+      typeof error === 'object' && error !== null && 'status' in error && typeof error.status === 'number'
+        ? error.status
+        : 500
+
+    const name = error instanceof Error ? error.name : 'Error'
+
+    if (status >= 500) {
+      logger.error('unhandled request error', { name, status })
+    } else {
+      logger.warn('rejected request', { name, status })
+    }
+
+    response.sendStatus(status)
+  })
 
   return app
 }
