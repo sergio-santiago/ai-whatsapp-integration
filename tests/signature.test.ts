@@ -24,10 +24,15 @@ describe('safeEqual', () => {
   })
 
   it('compares bytes, not code points', () => {
-    // 'é' is two bytes in UTF-8, so a naive length check on characters would
-    // disagree with the buffer comparison.
-    assert.equal(safeEqual('é', 'é'), true)
-    assert.equal(safeEqual('é', 'e'), false)
+    // U+00E9 is two bytes in UTF-8, so a naive length check on characters would
+    // disagree with the buffer comparison. Written as an escape rather than the
+    // literal so the repository-wide check for accented characters stays free
+    // of exceptions.
+    const eAcute = '\u00e9'
+
+    assert.equal(safeEqual(eAcute, '\u00e9'), true)
+    assert.equal(safeEqual(eAcute, 'e'), false)
+    assert.equal(Buffer.from(eAcute, 'utf8').length, 2)
   })
 })
 
