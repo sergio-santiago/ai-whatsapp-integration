@@ -11,16 +11,30 @@
 
 Two messaging platforms in, two model providers out, three ports in between. WhatsApp Business and Telegram are inbound channels, AI21 Studio and a local Ollama are the model behind them, and neither side knows the other exists.
 
-```
-                    signature verified
-                    over the raw bytes
-                            |
-   WhatsApp  ──┐            v            ┌──  AI21 Studio
-               ├──>  [ this service ]  ──┤
-   Telegram  ──┘            |            └──  Ollama (local)
-                            v
-                     200 in milliseconds,
-                     work happens behind it
+```mermaid
+flowchart LR
+    WA(["WhatsApp<br/>Business"])
+    TG(["Telegram<br/>Bot API"])
+
+    V["<b>1.</b> verify the signature<br/><i>over the raw bytes</i>"]
+    ACK["<b>2.</b> acknowledge<br/><i>200 in milliseconds</i>"]
+    WORK["<b>3.</b> then do the work<br/><i>idempotent, bounded, drains</i>"]
+
+    A21(["AI21 Studio<br/><i>Jamba</i>"])
+    OL(["Ollama<br/><i>local, no account</i>"])
+
+    WA --> V
+    TG --> V
+    V --> ACK --> WORK
+    WORK --> A21
+    WORK --> OL
+
+    classDef platform fill:#8b949e22,stroke:#8b949e,stroke-dasharray:4 3
+    classDef step fill:#1f6feb22,stroke:#1f6feb,stroke-width:2px
+    classDef model fill:#3fb95022,stroke:#3fb950
+    class WA,TG platform
+    class V,ACK,WORK step
+    class A21,OL model
 ```
 
 ---
