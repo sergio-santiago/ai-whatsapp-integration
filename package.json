@@ -1,37 +1,42 @@
 {
-  "name": "whatsapp-ai-chatbot",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "messaging-llm-bridge",
+  "version": "2.0.0",
+  "description": "Messaging webhooks answered by a language model: verified signatures, fast acknowledgement and idempotent delivery (TypeScript, ports and adapters)",
+  "type": "module",
+  "main": "src/main.ts",
+  "engines": {
+    "node": ">=24.12.0"
+  },
   "scripts": {
-    "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "ngrok": "ngrok http 3000",
-    "setup-ngrok": "bash scripts/setup-ngrok.sh"
+    "start": "node --env-file-if-exists=.env src/main.ts",
+    "dev": "node --env-file-if-exists=.env --watch src/main.ts",
+    "test": "node --test",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [
     "whatsapp",
     "whatsapp-business-api",
-    "chatbot",
-    "ai21",
+    "webhook",
+    "hexagonal-architecture",
+    "ports-and-adapters",
+    "typescript",
     "nodejs",
     "express",
-    "webhooks",
-    "docker"
+    "idempotency",
+    "hmac"
   ],
   "author": "Sergio Santiago Henares <sersanhen@gmail.com> (https://github.com/sergio-santiago)",
   "license": "MIT",
-  "description": "AI-powered WhatsApp chatbot bridging WhatsApp Business API and AI21 Studio (Node.js, Express and Docker)",
   "dependencies": {
-    "axios": "^1.9.0",
-    "body-parser": "^2.2.0",
-    "dotenv": "^16.5.0",
     "express": "^5.1.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.9.2",
+    "typescript": "^5.9.3"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/sergio-santiago/whatsapp-ai-chatbot"
+    "url": "https://github.com/sergio-santiago/messaging-llm-bridge"
   }
 }
